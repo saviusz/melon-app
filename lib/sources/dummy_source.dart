@@ -253,4 +253,9 @@ final songs = [
   ),
 ];
 
-class DummySource extends AbstractSource {}
+class DummySource extends AbstractSource {
+  @override
+  Future<Song?> getSong(String id) async {
+    return songs.firstWhere((song) => song.id == id);
+  }
+}
