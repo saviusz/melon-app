@@ -1,20 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:melon_app/components/song_list.dart';
+import 'package:melon_app/sources/abstract_source.dart';
+import 'package:melon_app/sources/dummy_source.dart';
 
 void main() {
-  runApp(const MainApp());
+  runApp(MainApp(source: DummySource()));
 }
 
 class MainApp extends StatelessWidget {
-  const MainApp({super.key});
+  final AbstractSource source;
+
+  const MainApp({super.key, required this.source});
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: Scaffold(
-        body: Center(
-          child: Text('Hello World!'),
-        ),
-      ),
+    return MaterialApp(
+      home: Scaffold(body: SongList(songs: source.listSongs())),
     );
   }
 }
