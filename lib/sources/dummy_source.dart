@@ -259,4 +259,9 @@ class DummySource extends AbstractSource {
   Future<List<SongMeta>> listSongs() async {
     return songs;
   }
+
+  @override
+  Future<Song?> getSong(String id) async {
+    return songs.firstWhere((song) => song.id == id);
+  }
 }
