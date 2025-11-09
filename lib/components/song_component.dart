@@ -16,18 +16,60 @@ class SongComponent extends StatelessWidget {
           return SingleChildScrollView(
             padding: EdgeInsets.all(8.0),
             child: Column(
+              spacing: 8.0,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 SongHeader(
                   mainTitle: song.titles.first,
                   alternativeTitles: [...song.titles.skip(1)],
                 ),
+                SongContent(parts: song.parts),
               ],
             ),
           );
         }
         return Center(child: Text("No song"));
       },
+    );
+  }
+}
+
+class SongContent extends StatelessWidget {
+  final List<Part> parts;
+
+  const SongContent({super.key, required this.parts});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      spacing: 4.0,
+      children: [
+        for (final part in parts)
+          Row(
+            children: [
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [for (final line in part.lines) Text(line.text)],
+                ),
+              ),
+              Container(
+                padding: EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(4.0),
+                  color: Colors.blueGrey[200],
+                ),
+                child: Column(
+                  children: [
+                    for (final line in part.lines)
+                      Text(line.chords.map((x) => x.rootNote.name).join(" ")),
+                  ],
+                ),
+              ),
+            ],
+          ),
+      ],
     );
   }
 }
