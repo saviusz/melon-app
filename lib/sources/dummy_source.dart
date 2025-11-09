@@ -1,3 +1,4 @@
+import 'package:melon_app/models/song_meta.dart';
 import 'package:melon_app/models/song.dart';
 import 'package:melon_app/sources/abstract_source.dart';
 
@@ -253,4 +254,9 @@ final songs = [
   ),
 ];
 
-class DummySource extends AbstractSource {}
+class DummySource extends AbstractSource {
+  @override
+  Future<List<SongMeta>> listSongs() async {
+    return songs;
+  }
+}
