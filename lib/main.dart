@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:melon_app/components/song_component.dart';
 import 'package:melon_app/components/song_list.dart';
 import 'package:melon_app/sources/abstract_source.dart';
 import 'package:melon_app/sources/dummy_source.dart';
@@ -15,7 +16,25 @@ class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: Scaffold(body: SongList(songs: source.listSongs())),
+      home: Scaffold(
+        body: Builder(
+          builder: (context) {
+            return SongList(
+              songs: source.listSongs(),
+              onSongSelection: (songId) {
+                final song = source.getSong(songId);
+                final navigator = Navigator.of(context);
+                navigator.push(
+                  MaterialPageRoute(
+                    builder: (context) =>
+                        Scaffold(body: SongComponent(song: song)),
+                  ),
+                );
+              },
+            );
+          },
+        ),
+      ),
     );
   }
 }

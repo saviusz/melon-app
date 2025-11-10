@@ -8,28 +8,34 @@ class SongComponent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-      future: song,
-      builder: (context, snap) {
-        final song = snap.data;
-        if (snap.hasData && song != null) {
-          return SingleChildScrollView(
-            padding: EdgeInsets.all(8.0),
-            child: Column(
-              spacing: 8.0,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                SongHeader(
-                  mainTitle: song.titles.first,
-                  alternativeTitles: [...song.titles.skip(1)],
+    return Align(
+      alignment: AlignmentGeometry.topCenter,
+      child: ConstrainedBox(
+        constraints: BoxConstraints(maxWidth: 450),
+        child: FutureBuilder(
+          future: song,
+          builder: (context, snap) {
+            final song = snap.data;
+            if (snap.hasData && song != null) {
+              return SingleChildScrollView(
+                padding: EdgeInsets.all(8.0),
+                child: Column(
+                  spacing: 8.0,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    SongHeader(
+                      mainTitle: song.titles.first,
+                      alternativeTitles: [...song.titles.skip(1)],
+                    ),
+                    SongContent(parts: song.parts),
+                  ],
                 ),
-                SongContent(parts: song.parts),
-              ],
-            ),
-          );
-        }
-        return Center(child: Text("No song"));
-      },
+              );
+            }
+            return Center(child: Text("No song"));
+          },
+        ),
+      ),
     );
   }
 }
