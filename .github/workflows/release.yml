@@ -1,0 +1,32 @@
+name: release
+on:
+  push:
+    branches:
+      - dev
+jobs:
+  build:
+    uses: ./.github/workflows/build.yml
+    with:
+      base_dir: "/melon-app/"
+  publish_web:
+    needs: build
+    runs-on: ubuntu-22.04
+    concurrency:
+      group: "pages"
+      cancel-in-progress: false
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    permissions:
+      pages: write
+      id-token: write
+    steps:
+      - uses: actions/download-artifact@v5
+        with:
+          artifact-ids: ${{needs.build.outputs.web-artifact}}
+          path: "./web/"
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: "./web/"
+      - uses: actions/deploy-pages@v4
+        id: deployment

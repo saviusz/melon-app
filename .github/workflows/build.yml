@@ -1,0 +1,52 @@
+name: build
+on:
+    workflow_call:
+        inputs:
+            flavour:
+                description: Flavour to build the app with
+                type: string
+                required: false
+                default: stable
+            version_override:
+                description: Override version of the app (eg. add PR number)
+                type: string
+                required: false
+            base_dir:
+                description: Override relative url of the app
+                type: string
+                required: false
+        outputs:
+            web-artifact:
+                value: ${{jobs.build_web.outputs.artifact}}
+                description: Id of generated artifact
+jobs:
+    build_web:
+        runs-on: ubuntu-22.04
+        outputs:
+            artifact: ${{steps.archive.outputs.artifact-id}}
+        steps:
+            - name: Setup flutter
+              uses: subosito/flutter-action@v2
+              with:
+                  channel: stable
+                  cache: true
+            - uses: actions/checkout@v5
+            - name: Build webpage
+              run: |
+                  ARG=""
+                  if [ "${{inputs.version_override}}" != "" ]; then
+                      ARG="$ARG --build-name=${{inputs.version_override}}"
+                  fi
+                  if [ "${{inputs.base_dir}}" != "" ]; then
+                      ARG="$ARG --base-href=${{inputs.base_dir}}"
+                  fi
+                  flutter build web $ARG
+            - name: Archive build artifacts
+              id: archive
+              uses: actions/upload-artifact@v4
+              with:
+                  path: ./build/web
+                  name: "build-web"
+
+    # build_android:
+    # build_ios:
