@@ -57,7 +57,26 @@ class SongContent extends StatelessWidget {
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [for (final line in part.lines) Text(line.text)],
+                  children: [
+                    for (final line in part.lines)
+                      switch (part.type) {
+                        PartType.note => Text(
+                          line.text,
+                          style: TextStyle(
+                            color: Colors.blueGrey[700],
+                            fontStyle: FontStyle.italic,
+                          ),
+                        ),
+                        PartType.chorus => Padding(
+                          padding: const EdgeInsets.only(left: 16),
+                          child: Text(
+                            line.text,
+                            style: TextStyle(fontWeight: FontWeight.w700),
+                          ),
+                        ),
+                        _ => Text(line.text),
+                      },
+                  ],
                 ),
               ),
               Container(
