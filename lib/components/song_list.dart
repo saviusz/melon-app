@@ -21,18 +21,25 @@ class SongList extends StatelessWidget {
         if (data != null) {
           return Padding(
             padding: const EdgeInsets.all(4.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              spacing: 4.0,
-              children: [
-                for (final song in data)
-                  SongListItem(
-                    key: Key(song.id),
-                    song: song,
-                    onTap: () => onSongSelection(song.id),
-                  ),
-              ],
+            child: ListView.builder(
+              itemCount: data.length,
+              itemBuilder: (context, index) => SongListItem(
+                song: data[index],
+                onTap: () => onSongSelection(data[index].id),
+              ),
             ),
+            // child: Column(
+            //   crossAxisAlignment: CrossAxisAlignment.stretch,
+            //   spacing: 4.0,
+            //   children: [
+            //     for (final song in data)
+            //       SongListItem(
+            //         // key: Key(song.id),
+            //         song: song,
+            //         onTap: () => onSongSelection(song.id),
+            //       ),
+            //   ],
+            // ),
           );
         }
         return Center(child: Text("No data"));
